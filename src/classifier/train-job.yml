@@ -1,0 +1,19 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+
+display_name: query-router-training
+experiment_name: docuassist-query-router
+description: Train a query classification model for DocuAssist routing
+
+command: >-
+  python train.py --data-path ${{inputs.training_data}} --max-features 500 --C 1.0
+
+code: .
+
+inputs:
+  training_data:
+    type: uri_file
+    path: ./training_data.json
+
+environment:
+  image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+  conda_file: conda.yml

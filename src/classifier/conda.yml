@@ -1,0 +1,11 @@
+name: docuassist-classifier
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - scikit-learn==1.5.2
+    - mlflow==2.7.1
+    - azureml-mlflow==1.60.0
