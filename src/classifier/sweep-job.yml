@@ -1,0 +1,41 @@
+$schema: https://azuremlschemas.azureedge.net/latest/sweepJob.schema.json
+type: sweep
+
+display_name: query-router-sweep
+experiment_name: docuassist-query-router
+description: Hyperparameter sweep for query router classifier
+
+trial:
+  command: >-
+    python train.py
+    --data-path ${{inputs.training_data}}
+    --max-features ${{search_space.max_features}}
+    --C ${{search_space.C}}
+  code: .
+  environment:
+    image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu22.04
+    conda_file: conda.yml
+
+inputs:
+  training_data:
+    type: uri_file
+    path: ./training_data.json
+
+search_space:
+  max_features:
+    type: choice
+    values: [100, 300, 500, 1000]
+  C:
+    type: choice
+    values: [0.1, 1.0, 10.0]
+
+sampling_algorithm: grid
+
+objective:
+  goal: maximize
+  primary_metric: accuracy
+
+limits:
+  max_total_trials: 12
+  max_concurrent_trials: 2
+  timeout: 3600
